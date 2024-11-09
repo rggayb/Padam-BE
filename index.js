@@ -1,0 +1,30 @@
+// Import required modules
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const app = express();
+
+// Import routes and other required files
+const { getHomePage } = require("./src/utils/LandingPage.utils");
+const nearestRoutes = require("./src/routes/Nearest.route");
+
+// Setup the server
+dotenv.config();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    redentials: true,
+  })
+);
+
+// Routes used in the application
+app.get("/", getHomePage);
+app.use("/nearest", nearestRoutes);
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
