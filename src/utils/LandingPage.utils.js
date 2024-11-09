@@ -5,7 +5,7 @@ const getHomePage = (req, res) => {
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Welcome to Oculab Endpoint</title>
+            <title>Welcome to Padam! Endpoint</title>
             <style>
               body {
                 display: flex;
@@ -25,7 +25,7 @@ const getHomePage = (req, res) => {
               }
     
               h1 {
-                color: #794cff;
+                color: #D14444;
                 font-size: 24px;
                 margin-bottom: 20px;
               }
@@ -38,7 +38,7 @@ const getHomePage = (req, res) => {
           </head>
           <body>
             <div class="container">
-              <h1>Welcome to Oculab Endpoint</h1>
+              <h1>Welcome to Padam! Endpoint</h1>
               <p>Unauthorized access is strictly prohibited!</p>
             </div>
           </body>
