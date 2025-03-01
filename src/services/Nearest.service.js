@@ -58,40 +58,41 @@ exports.getWaterSources = async function (body) {
   // sorting the node with distance from the fire point in ascending order
   nodeWithDistance.sort((a, b) => a.distance - b.distance);
 
-  // get the nearest node from the fire point
-  let nearestNode = nodeWithDistance[0];
+  const uniqueByWayId = nodeWithDistance.filter((item, index, self) =>
+    index === self.findIndex((t) => t.wayId === item.wayId)
+  );
 
-  // Get the address of the nearest water source
+  // Get up to 5 nearest nodes (or fewer if not enough data available)
+  let nearestNodes = uniqueByWayId.slice(0, 5);
+
+  // If no water sources found, return empty array
+  if (nearestNodes.length === 0) {
+    return "Tidak berhasil menemukan sumber air dalam radius " + radius/1000 + "km";
+  }
+
+  // Get addresses for all nearest nodes
   try {
-    nearestNode.address = await getAddressFromOsmIds(
-      nearestNode.wayId,
-      nearestNode.nodeId
+    const nodesWithAddresses = await Promise.all(
+      nearestNodes.map(async (node) => {
+        const address = await getAddressFromOsmIds(node.wayId, node.nodeId);
+        const roadInfo = await getNearestRoadNode(node.longitude, node.latitude);
+        
+        return {
+          wayId: node.wayId,
+          node: {
+            id: node.nodeId,
+            latitude: Number(node.latitude),
+            longitude: Number(node.longitude),
+            distanceFromFirePoint: node.distance,
+            address: address
+          },
+          road: roadInfo
+        };
+      })
     );
+
+    return nodesWithAddresses;
   } catch (error) {
     throw new Error("Failed to fetch data from OSM: " + error.message);
   }
-
-  // Get the nearest road node from the water source
-  let responseSuccess = {
-    wayId: nearestNode.wayId,
-    node: {
-      id: nearestNode.nodeId,
-      latitude: Number(nearestNode.latitude),
-      longitude: Number(nearestNode.longitude),
-      distanceFromFirePoint: nearestNode.distance,
-      address: nearestNode.address,
-    },
-    road: {},
-  };
-
-  try {
-    responseSuccess.road = await getNearestRoadNode(
-      nearestNode.longitude,
-      nearestNode.latitude
-    );
-  } catch (error) {
-    throw new Error("Failed to fetch data from OSM: " + error.message);
-  }
-
-  return responseSuccess;
 };
