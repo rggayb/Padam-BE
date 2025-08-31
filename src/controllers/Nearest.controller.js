@@ -14,7 +14,8 @@ exports.getWaterSource = async (req, res) => {
       result
     );
   } catch (error) {
-    console.log(error);
+    // Log error for debugging (remove in production)
+    console.error("Nearest service error:", error);
 
     sendResponse(
       res,

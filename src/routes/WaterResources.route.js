@@ -1,11 +1,11 @@
-const Express = require("express");
-const router = Express.Router();
-const waterResourceController = require("../controllers/WaterResources.controller");
+const express = require("express");
+const waterSourceController = require("../controllers/WaterResources.controller");
+const router = express.Router();
 
-router.post("/", waterResourceController.createWaterResource);
-router.get("/", waterResourceController.getWaterResources);
-router.get("/:id", waterResourceController.getWaterResourceById);
-router.put("/:id", waterResourceController.updateWaterResourceById);
-router.delete("/:id", waterResourceController.deleteWaterResourceById);
+router.get("/", waterSourceController.getWaterSources);
+router.post("/", waterSourceController.createWaterResource);
+router.get("/:id", waterSourceController.getWaterSourceById);
+router.put("/:id", waterSourceController.updateWaterSourceById);
+router.delete("/:id", waterSourceController.deleteWaterResourceById);
 
 module.exports = router;

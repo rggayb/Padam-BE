@@ -1,41 +1,47 @@
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require("uuid");
-const WaterResourceInputType = require("./enum/WaterResourceInputType.enum");
 
-const waterResourcesSchema = new mongoose.Schema({
-    // id: {
-    //     type: String,
-    //     default: uuidv4,
-    // },
+const waterSourcesSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,             
     },
-    description: {
+    notes: {
+        type: String,
+        default: ""
+    },
+    address: {
         type: String,
     },
-    type: {
-        type: String,
+    coordinates: {
+        type: {
+            longitude: {
+                type: String,
+                required: true,
+            },
+            latitude: {
+                type: String,
+                required: true,
+            }
+        },
         required: true,
-        enum: WaterResourceInputType,
     },
-    longitude: {
-        type: Number,
-        required: true,
+    status: {
+        type: Boolean,  // Changed to Boolean
+        default: false  // Default to false (mati)
     },
-    latitude: {
-        type: Number,
-        required: true,
+    images: {
+        type: [String],  // Array of image URLs or file paths
+        default: []
     },
-    photos: {
-        type: [String],
-    },
-}, { versionKey: false });
+}, { 
+    versionKey: false,
+    collection: 'waterSources'  // Explicitly specify collection name
+});
 
-const WaterResources = mongoose.model("WaterResources", waterResourcesSchema);
+const WaterSources = mongoose.model("WaterSources", waterSourcesSchema);
 
 module.exports = {
-    WaterResources,
-    waterResourcesSchema
+    WaterSources,
+    waterSourcesSchema
 };
 

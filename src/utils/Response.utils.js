@@ -25,7 +25,7 @@ const sendResponse = (
   };
 
   if (status === "error") {
-    response.data = {
+    response.error = {
       errorType: errorType,
       description: description,
     };
